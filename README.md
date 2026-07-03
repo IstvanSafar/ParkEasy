@@ -59,19 +59,7 @@ tools/update-zones.py zónaadat-frissítő script
 
 ## Zónaadatok
 
-A parkolási zónaadatok a Nemzeti Mobilfizetési Zrt. nyilvánosan elérhető parkolási zóna-információi alapján készülnek. Az adatok tájékoztató jellegűek, és időközben változhatnak.
-
-Az alkalmazás nem áll kapcsolatban a Nemzeti Mobilfizetési Zrt.-vel, és nem minősül hivatalos alkalmazásnak. Parkolás előtt mindig a helyszíni közúti jelzések és a hatályos parkolási szabályok az irányadók.
-
-## Zónaadatok frissítése
-
-A zónaadat-állomány (`data/zones.geojson`) **nem része a repónak** — a GitHub Actions workflow állítja elő minden publikáláskor a Nemzeti Mobilfizetési Zrt. nyilvánosan elérhető parkolási zónaadataiból, és hetente automatikusan újraépül. Helyi fejlesztéshez egyszer kell legenerálni:
-
-```bash
-python tools/update-zones.py
-```
-
-A script letölti az aktuális magyarországi zónaadatokat (egyetlen lekéréssel), előállítja a `data/zones.geojson` fájlt, és frissíti a `data/config.json` `dataVersion` mezőjét. A zónaadatok tájékoztató jellegűek, ezért célszerű ellenőrizni, hogy a letöltés sikeres volt.
+A zónaadatok a Nemzeti Mobilfizetési Zrt. nyilvános zóna-információi alapján készülnek, tájékoztató jellegűek. Az alkalmazás nem hivatalos; parkolás előtt a helyszíni jelzések az irányadók. Az adatállomány nem része a repónak — a deploy tölti le publikáláskor, és hetente frissül. Helyi fejlesztéshez: `python tools/update-zones.py`
 
 ## Adatkezelés
 

@@ -23,6 +23,10 @@ const CARRIER_PREFIXES = {
   one: '+3670763',
 };
 
+// NMF kozponti szamok es uzenetformatum — orszagosan egyseges.
+const NMF_START_NUMBER = '+36303444805';
+const NMF_STOP_NUMBER = '+36303444806';
+
 /**
  * Indito SMS. opts:
  *  - vehicleType: '' | 'M' | 'B' | 'T' | 'KT'
@@ -45,10 +49,8 @@ export function buildStartSms(zoneProps, plate, provider = 'nmf', opts = {}) {
   // NMF: a tipus vesszovel a rendszam mogott tamogatott (M/T/B)
   const plateWithType = opts.vehicleType && opts.vehicleType !== 'KT'
     ? `${normalized},${opts.vehicleType}` : normalized;
-  const body = zoneProps.startTemplate
-    .replace('{ZONE}', zoneProps.zone)
-    .replace('{PLATE}', plateWithType);
-  return { uri: buildSmsUri(zoneProps.smsNumber, body), body, number: zoneProps.smsNumber };
+  const body = `${zoneProps.zone} ${plateWithType}`;
+  return { uri: buildSmsUri(NMF_START_NUMBER, body), body, number: NMF_START_NUMBER };
 }
 
 export function buildStopSms(zoneProps, plate, provider = 'nmf') {
@@ -57,6 +59,6 @@ export function buildStopSms(zoneProps, plate, provider = 'nmf') {
     const number = prefix + zoneProps.zone;
     return { uri: buildSmsUri(number, 'STOP'), body: 'STOP', number };
   }
-  const body = zoneProps.stopTemplate.replace('{PLATE}', normalizePlate(plate));
-  return { uri: buildSmsUri(zoneProps.smsStopNumber, body), body, number: zoneProps.smsStopNumber };
+  const body = `STOP ${normalizePlate(plate)}`;
+  return { uri: buildSmsUri(NMF_STOP_NUMBER, body), body, number: NMF_STOP_NUMBER };
 }

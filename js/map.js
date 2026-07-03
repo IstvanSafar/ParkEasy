@@ -25,11 +25,15 @@ export async function initMap(position, currentZone, onClick = null, onZoneSelec
     try {
       const geojson = await loadZones();
       const currentCode = currentZone?.feature.properties.zone;
+      // dij szerinti szinezes (Ft/ora): olcso zold -> draga piros
+      const priceColor = (p) =>
+        !p ? '#6c757d' : p <= 300 ? '#2e7d32' : p <= 450 ? '#7cb342'
+        : p <= 600 ? '#f9a825' : p <= 800 ? '#ef6c00' : '#c62828';
       zonesLayer = L.geoJSON(geojson, {
         // pozicio-valaszto modban a poligonok atengedik a kattintast a terkepnek
         interactive: !onClick,
         style: (f) => ({
-          color: f.properties.color || '#3388ff',
+          color: priceColor(f.properties.price),
           weight: f.properties.zone === currentCode ? 3 : 1,
           fillOpacity: f.properties.zone === currentCode ? 0.5 : 0.25,
         }),

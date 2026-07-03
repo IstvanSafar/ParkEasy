@@ -47,15 +47,8 @@ def to_geojson(raw):
                 'zone': z['zoneid'],
                 'district': z['telepules'],
                 'price': z.get('fee'),
-                'smsNumber': '+36303444805',
-                'smsStopNumber': '+36303444806',
-                'startTemplate': '{ZONE} {PLATE}',
-                'stopTemplate': 'STOP {PLATE}',
                 'paidFrom': m.group(1) if m else None,
                 'paidTo': m.group(2) if m else None,
-                'timetableRaw': tt,
-                'operator': z.get('service_na', ''),
-                'color': z.get('color', ''),
             },
             'geometry': {'type': 'Polygon', 'coordinates': [coords]},
         })
@@ -75,6 +68,7 @@ def main():
     out.write_text(json.dumps(gj, ensure_ascii=False), encoding='utf-8')
     cfg_path = ROOT / 'data' / 'config.json'
     cfg = json.loads(cfg_path.read_text(encoding='utf-8'))
+    cfg.pop('dataSource', None)
     cfg['dataVersion'] = date.today().isoformat()
     cfg_path.write_text(json.dumps(cfg, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     zones = len({f['properties']['zone'] for f in gj['features']})
