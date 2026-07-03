@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="hu" data-bs-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>ParkEasy</title>
+  <meta name="description" content="GPS-alapú parkolási zóna felismerés és SMS-parkolás Budapesten">
+  <meta name="theme-color" content="#0d6efd">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="assets/icons/icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+  <link rel="stylesheet" href="vendor/bootstrap.min.css">
+  <link rel="stylesheet" href="vendor/leaflet.css">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+
+<nav class="navbar navbar-dark bg-primary sticky-top">
+  <div class="container-fluid">
+    <span class="navbar-brand fw-semibold">🅿️ ParkEasy</span>
+    <div>
+      <button id="nav-map" class="btn btn-outline-light btn-sm me-1" title="Térkép">🗺️</button>
+      <button id="nav-settings" class="btn btn-outline-light btn-sm" title="Beállítások">⚙️</button>
+    </div>
+  </div>
+</nav>
+
+<div id="offline-banner" class="alert alert-warning text-center rounded-0 mb-0 py-1 d-none">
+  Offline mód — a mentett zónaadatokkal működik
+</div>
+<div id="notify-banner" class="alert alert-danger text-center rounded-0 mb-0 py-2 d-none"></div>
+
+<main class="container py-3" style="max-width: 480px">
+
+  <!-- ===== FŐ NÉZET ===== -->
+  <section id="view-home">
+    <div class="card mb-3">
+      <div class="card-body">
+        <div id="geo-status" class="text-center text-secondary py-2">
+          <div class="spinner-border spinner-border-sm me-2" role="status"></div>
+          📍 Hely keresése…
+        </div>
+        <div id="zone-info" class="d-none">
+          <div id="zone-nearby-note" class="alert alert-info py-2 small d-none"></div>
+          <div class="row text-center">
+            <div class="col">
+              <div class="small text-secondary">Parkolási zóna</div>
+              <div id="zone-code" class="fs-2 fw-bold">–</div>
+              <div id="zone-district" class="small text-secondary"></div>
+            </div>
+            <div class="col border-start">
+              <div class="small text-secondary">Díj</div>
+              <div id="zone-price" class="fs-4 fw-semibold">–</div>
+              <div id="zone-hours" class="small text-secondary"></div>
+            </div>
+          </div>
+        </div>
+        <div id="zone-free" class="alert alert-success text-center mb-0 d-none">
+          Itt nem találtunk fizetős zónát 🎉
+        </div>
+        <button id="btn-open-map" class="btn btn-outline-primary btn-sm w-100 mt-2">
+          🗺️ Térkép — zónák és kézi választás
+        </button>
+      </div>
+    </div>
+
+    <div class="card mb-3">
+      <div class="card-body">
+        <label class="form-label small text-secondary mb-1">Rendszám</label>
+        <div id="plate-chips" class="d-flex gap-2 mb-2 d-none"></div>
+        <input id="plate-input" class="form-control form-control-lg text-uppercase mb-2"
+               placeholder="AABB123" autocomplete="off" maxlength="8">
+        <label class="form-label small text-secondary mb-1 mt-2">
+          Parkolási idő <span class="text-secondary">— mobilvásárlásnál az SMS-be kerül; start–stop: amíg le nem állítod</span>
+        </label>
+        <div id="duration-group" class="d-flex flex-wrap gap-1"></div>
+        <label class="form-label small text-secondary mb-1 mt-3">
+          Emlékeztető <span class="text-secondary">— ennyi idővel az indítás után szólunk</span>
+        </label>
+        <div id="reminder-group" class="d-flex flex-wrap gap-1"></div>
+      </div>
+    </div>
+
+    <button id="btn-start" class="btn btn-primary btn-lg w-100 py-3 fw-bold" disabled>
+      INDÍTÁS
+    </button>
+    <div id="start-hint" class="text-center small text-danger mt-2 d-none"></div>
+    <div class="text-center small mt-2">
+      <a href="#" class="text-secondary" data-bs-toggle="modal" data-bs-target="#reg-info-modal">
+        ℹ️ Az SMS-parkoláshoz regisztráció szükséges — hogyan?
+      </a>
+    </div>
+  </section>
+
+  <!-- ===== AKTÍV PARKOLÁS NÉZET ===== -->
+  <section id="view-active" class="d-none">
+    <div class="card border-success mb-3">
+      <div class="card-header bg-success text-white text-center fw-semibold">
+        ✓ Parkolás aktív — <span id="active-zone"></span>
+      </div>
+      <div class="card-body">
+        <div id="countdown" class="display-3 text-center fw-bold my-2">–:–:–</div>
+        <div class="row text-center mt-3">
+          <div class="col">
+            <div class="small text-secondary">Indult</div>
+            <div id="active-start" class="fs-5">–</div>
+          </div>
+          <div class="col border-start">
+            <div class="small text-secondary">Lejár</div>
+            <div id="active-end" class="fs-5">–</div>
+          </div>
+        </div>
+        <div class="row text-center mt-3">
+          <div class="col">
+            <div class="small text-secondary">Eltelt</div>
+            <div id="active-elapsed" class="fs-5">–</div>
+          </div>
+          <div class="col border-start">
+            <div class="small text-secondary">Becsült költség</div>
+            <div id="active-cost" class="fs-5">–</div>
+          </div>
+        </div>
+        <div class="text-center small text-secondary mt-3">
+          Rendszám: <span id="active-plate" class="fw-semibold"></span>
+        </div>
+      </div>
+    </div>
+    <button id="btn-stop" class="btn btn-danger btn-lg w-100 py-3 fw-bold">LEÁLLÍTÁS</button>
+  </section>
+
+  <!-- ===== BEÁLLÍTÁSOK NÉZET ===== -->
+  <section id="view-settings" class="d-none">
+    <h5 class="mb-3">Beállítások</h5>
+    <div class="card mb-3">
+      <div class="card-body">
+        <label for="setting-plate1" class="form-label small text-secondary mb-1">Rendszám</label>
+        <div class="input-group mb-1">
+          <input id="setting-plate1" class="form-control text-uppercase" placeholder="AABB123" maxlength="8">
+          <select id="setting-plate1-type" class="form-select" style="max-width: 11rem">
+            <option value="">🚗 Személyautó</option>
+            <option value="M">🏍️ Motor</option>
+            <option value="B">🚌 Busz</option>
+            <option value="T">🚚 Teherautó</option>
+            <option value="KT">🚐 Kisteherautó</option>
+          </select>
+        </div>
+        <input id="setting-plate1-country" class="form-control form-control-sm text-uppercase mb-3"
+               placeholder="Felségjel, ha külföldi (pl. CH) — üresen: magyar" maxlength="3">
+        <label for="setting-plate2" class="form-label small text-secondary mb-1">Második rendszám (opcionális)</label>
+        <div class="input-group mb-1">
+          <input id="setting-plate2" class="form-control text-uppercase" placeholder="CCDD456" maxlength="8">
+          <select id="setting-plate2-type" class="form-select" style="max-width: 11rem">
+            <option value="">🚗 Személyautó</option>
+            <option value="M">🏍️ Motor</option>
+            <option value="B">🚌 Busz</option>
+            <option value="T">🚚 Teherautó</option>
+            <option value="KT">🚐 Kisteherautó</option>
+          </select>
+        </div>
+        <input id="setting-plate2-country" class="form-control form-control-sm text-uppercase"
+               placeholder="Felségjel, ha külföldi (pl. CH) — üresen: magyar" maxlength="3">
+      </div>
+    </div>
+    <div class="card mb-3">
+      <div class="card-body">
+        <label for="setting-provider" class="form-label small text-secondary mb-1">Fizetési mód</label>
+        <select id="setting-provider" class="form-select mb-1">
+          <option value="nmf" selected>Nemzeti Mobilfizetés (egyenleggel)</option>
+          <option value="telekom">Telekom mobilvásárlás</option>
+          <option value="yettel">Yettel mobilvásárlás</option>
+          <option value="one">One mobilvásárlás</option>
+        </select>
+        <div class="small text-secondary mb-3">Ettől függ, milyen számra és formátumban készül az SMS.</div>
+        <label class="form-label small text-secondary mb-1">Alapértelmezett parkolási idő</label>
+        <div id="setting-duration-group" class="d-flex flex-wrap gap-1 mb-3"></div>
+        <label class="form-label small text-secondary mb-1">Alapértelmezett emlékeztető</label>
+        <div id="setting-reminder-group" class="d-flex flex-wrap gap-1 mb-3"></div>
+        <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" id="setting-dark">
+          <label class="form-check-label" for="setting-dark">Sötét mód</label>
+        </div>
+        <div class="small text-secondary mt-3">
+          ℹ️ Az értesítés csak akkor jelenik meg, amíg az alkalmazás meg van nyitva (akár a háttérben).
+        </div>
+      </div>
+    </div>
+    <div class="card mb-3">
+      <div class="card-header small fw-semibold">Előzmények</div>
+      <ul id="history-list" class="list-group list-group-flush">
+        <li class="list-group-item small text-secondary">Még nincs parkolási előzmény.</li>
+      </ul>
+    </div>
+    <button id="btn-settings-back" class="btn btn-outline-secondary w-100">Vissza</button>
+  </section>
+
+  <!-- ===== TÉRKÉP NÉZET ===== -->
+  <section id="view-map" class="d-none">
+    <div id="map-test-hint" class="alert alert-info text-center py-2 mb-2 d-none">
+      🧪 Tesztmód: <b>kattints a térképre</b> a pozíció kiválasztásához (ne húzd az egeret kattintás közben)
+    </div>
+    <div id="map"></div>
+    <div id="map-offline" class="alert alert-warning text-center mt-2 d-none">
+      A térkép offline nem érhető el, de a zónafelismerés működik.
+    </div>
+    <button id="btn-map-back" class="btn btn-outline-secondary w-100 mt-2">Vissza</button>
+  </section>
+
+  <!-- Regisztrációs tudnivalók modal -->
+  <div class="modal fade" id="reg-info-modal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h6 class="modal-title">SMS-parkolás — egyszeri beállítás</h6>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Bezárás"></button>
+        </div>
+        <div class="modal-body small">
+          <p>A rendszernek előre tudnia kell, ki fizet. Két lehetőség közül választhatsz —
+            bármelyik egyszeri beállítás után a ParkEasy SMS-ei élesben működnek.
+            <b>Fontos:</b> a beállításokban (⚙️) add meg, melyiket használod, mert
+            más-más számra és formátumban megy az SMS!</p>
+
+          <div class="card mb-2">
+            <div class="card-body py-2">
+              <div class="fw-semibold mb-1">1. Nemzeti Mobilfizetés regisztráció</div>
+              Rendszám + telefonszám regisztrálása, majd egyenlegfeltöltés
+              (bankkártyával azonnali). A díjat az egyenlegedből vonják.
+              <div class="mt-2">
+                <a class="btn btn-primary btn-sm" target="_blank" rel="noopener"
+                   href="https://www.nemzetimobilfizetes.hu">Regisztráció: nemzetimobilfizetes.hu</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-body py-2">
+              <div class="fw-semibold mb-1">2. Mobilszolgáltatói „mobilvásárlás"</div>
+              Nem kell egyenleget feltölteni: a parkolás a havi mobilszámládra kerül.
+              A szolgáltatódnál kell egyszer aktiválni (van, ahol alapból aktív):
+              <div class="d-flex flex-wrap gap-2 mt-2">
+                <a class="btn btn-outline-primary btn-sm" target="_blank" rel="noopener"
+                   href="https://www.telekom.hu/lakossagi/szolgaltatasok/mobil/kapcsolodo-szolgaltatasok/mobilvasarlas/mobilparkolas">Telekom</a>
+                <a class="btn btn-outline-primary btn-sm" target="_blank" rel="noopener"
+                   href="https://www.yettel.hu/szolgaltatas/mobilvasarlas/mobilparkolas">Yettel</a>
+                <a class="btn btn-outline-primary btn-sm" target="_blank" rel="noopener"
+                   href="https://www.one.hu/szolgaltatasok/extrak-kiegeszitok/mobilvasarlas/mobilparkolas">One</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SMS megerősítés modal -->
+  <div class="modal fade" id="sms-confirm-modal" tabindex="-1" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-body text-center py-4">
+          <p class="fs-5 mb-1" id="sms-confirm-question">Elküldted az SMS-t?</p>
+          <p class="small text-secondary mb-2" id="sms-confirm-detail"></p>
+          <button id="sms-copy" type="button" class="btn btn-outline-secondary btn-sm">📋 Üzenet másolása</button>
+        </div>
+        <div class="modal-footer justify-content-center">
+          <button id="sms-confirm-no" class="btn btn-outline-secondary" data-bs-dismiss="modal">Mégsem</button>
+          <button id="sms-confirm-yes" class="btn btn-primary px-4" data-bs-dismiss="modal">Igen, elküldtem</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script src="vendor/bootstrap.bundle.min.js"></script>
+<script src="vendor/leaflet.js"></script>
+<script type="module" src="js/app.js"></script>
+</body>
+</html>

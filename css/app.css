@@ -1,0 +1,35 @@
+/* ParkEasy sajat stilusok */
+
+html, body {
+  height: 100%;
+}
+
+body {
+  background-color: var(--bs-secondary-bg);
+}
+
+#map {
+  height: 70vh;
+  min-height: 320px;
+  border-radius: var(--bs-border-radius);
+  z-index: 0; /* a Bootstrap modal ala keruljon */
+}
+
+#countdown {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.02em;
+}
+
+#countdown.warning {
+  color: var(--bs-danger);
+  animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  50% { opacity: 0.5; }
+}
+
+/* nagy erintofeluletek mobilon */
+.btn-lg {
+  min-height: 3.5rem;
+}

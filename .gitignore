@@ -1,0 +1,21 @@
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# szerkesztok
+.vscode/
+.idea/
+*.swp
+
+# esetleges kesobbi tooling
+node_modules/
+dist/
+*.log
+
+# helyi kiserletezes
+scratch/
+*.local.*
+
+# zonaadat: nincs a repoban, a deploy tolti le (tools/update-zones.py)
+data/zones.geojson
