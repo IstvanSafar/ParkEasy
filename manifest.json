@@ -1,7 +1,7 @@
 {
   "name": "ParkEasy — SMS parkolás",
   "short_name": "ParkEasy",
-  "description": "GPS-alapú parkolási zóna felismerés és SMS-parkolás Budapesten",
+  "description": "GPS-alapú parkolási zóna felismerés és SMS-parkolás Magyarországon",
   "lang": "hu",
   "start_url": "./index.html",
   "scope": "./",

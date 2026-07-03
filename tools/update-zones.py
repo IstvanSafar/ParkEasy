@@ -1,4 +1,4 @@
-# Budapesti parkolasi zonak frissitese a Nemzeti Mobilfizetes terkeperol.
+# Magyarorszagi parkolasi zonak frissitese a Nemzeti Mobilfizetes terkeperol.
 # Hasznalat:  python tools/update-zones.py
 # Kimenet:    data/zones.geojson (felulirja) + data/config.json dataVersion
 #
@@ -36,8 +36,6 @@ def fetch_zones():
 def to_geojson(raw):
     features = []
     for z in raw:
-        if not z.get('telepules', '').startswith('Budapest'):
-            continue
         coords = [[float(p['long']), float(p['lat'])] for p in z['geometry']]
         if coords and coords[0] != coords[-1]:
             coords.append(coords[0])
@@ -63,7 +61,7 @@ def to_geojson(raw):
         })
     return {
         'type': 'FeatureCollection',
-        'name': 'Budapest parkolasi zonak',
+        'name': 'Magyarorszagi parkolasi zonak',
         'source': f'Nemzeti Mobilfizetesi Zrt. (nemzetimobilfizetes.hu), lekerdezve: {date.today().isoformat()}',
         'features': features,
     }
@@ -71,7 +69,7 @@ def to_geojson(raw):
 def main():
     raw = fetch_zones()
     gj = to_geojson(raw)
-    if len(gj['features']) < 100:
+    if len(gj['features']) < 800:
         raise SystemExit(f'Gyanusan keves zona ({len(gj["features"])}) — nem irom felul az adatot.')
     out = ROOT / 'data' / 'zones.geojson'
     out.write_text(json.dumps(gj, ensure_ascii=False), encoding='utf-8')

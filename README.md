@@ -1,12 +1,12 @@
 # 🅿️ ParkEasy
 
-**GPS-alapú parkolási zóna felismerés és SMS-parkolás Budapesten — telepíthető, offline-képes webalkalmazás (PWA).**
+**GPS-alapú parkolási zóna felismerés és SMS-parkolás Magyarországon — telepíthető, offline-képes webalkalmazás (PWA).**
 
 Megállsz az autóval, megnyitod az appot, és az megmondja, melyik fizetős zónában vagy, mennyibe kerül, majd egy gombnyomásra előkészíti a parkolást indító SMS-t. A lejárat előtt figyelmeztet, a leállító SMS-t is összeállítja. Nincs szerver, nincs fiók, nincs adatgyűjtés — minden a telefonodon fut és tárolódik.
 
 ## Funkciók
 
-- 📍 **Zónafelismerés GPS alapján** — 215 budapesti zóna-poligon, point-in-polygon kereséssel; ha nem vagy zónában, a legközelebbit ajánlja fel a távolsággal
+- 📍 **Zónafelismerés GPS alapján** — ~1300 zóna-poligon országszerte (Budapest + vidéki városok), point-in-polygon kereséssel; ha nem vagy zónában, a legközelebbit ajánlja fel a távolsággal
 - 💬 **SMS előkészítés egy gombbal** — az indító és leállító SMS kész címzettel és szöveggel nyílik meg a telefon SMS-alkalmazásában
 - 💳 **Négy fizetési mód** — Nemzeti Mobilfizetés (központi szám, `ZÓNA RENDSZÁM`) vagy Telekom / Yettel / One mobilvásárlás (`+36xx763` + zónakód, csak a rendszám)
 - ⏱️ **Visszaszámláló és becsült költség** — az aktív parkolás túléli az app bezárását is
@@ -52,14 +52,14 @@ js/storage.js         LocalStorage (rendszámok, beállítások, aktív parkolá
 js/notifications.js   lejárat előtti értesítés (Notification API + fallback)
 js/map.js             Leaflet térkép a zóna-poligonokkal
 js/zones.js           zónaadat betöltés
-data/zones.geojson    budapesti zóna-poligonok (nincs a repóban — a deploy generálja)
+data/zones.geojson    magyarországi zóna-poligonok (nincs a repóban — a deploy generálja)
 service-worker.js     offline cache (statikus: cache-first, zónaadat: network-first)
 tools/update-zones.py zónaadat-frissítő script
 ```
 
 ## Zónaadatok
 
-A budapesti parkolási zónaadatok a Nemzeti Mobilfizetési Zrt. nyilvánosan elérhető parkolási zóna-információi alapján készülnek. Az adatok tájékoztató jellegűek, és időközben változhatnak.
+A parkolási zónaadatok a Nemzeti Mobilfizetési Zrt. nyilvánosan elérhető parkolási zóna-információi alapján készülnek. Az adatok tájékoztató jellegűek, és időközben változhatnak.
 
 Az alkalmazás nem áll kapcsolatban a Nemzeti Mobilfizetési Zrt.-vel, és nem minősül hivatalos alkalmazásnak. Parkolás előtt mindig a helyszíni közúti jelzések és a hatályos parkolási szabályok az irányadók.
 
@@ -71,7 +71,7 @@ A zónaadat-állomány (`data/zones.geojson`) **nem része a repónak** — a Gi
 python tools/update-zones.py
 ```
 
-A script letölti az aktuális budapesti zónaadatokat, előállítja a `data/zones.geojson` fájlt, és frissíti a `data/config.json` `dataVersion` mezőjét. A zónaadatok tájékoztató jellegűek, ezért célszerű ellenőrizni, hogy a letöltés sikeres volt.
+A script letölti az aktuális magyarországi zónaadatokat (egyetlen lekéréssel), előállítja a `data/zones.geojson` fájlt, és frissíti a `data/config.json` `dataVersion` mezőjét. A zónaadatok tájékoztató jellegűek, ezért célszerű ellenőrizni, hogy a letöltés sikeres volt.
 
 ## Adatkezelés
 
