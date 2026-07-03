@@ -78,6 +78,10 @@
           Emlékeztető <span class="text-secondary">— ennyi idővel az indítás után szólunk</span>
         </label>
         <div id="reminder-group" class="d-flex flex-wrap gap-1"></div>
+        <label class="form-label small text-secondary mb-1 mt-3">
+          Fizetési mód <span class="text-secondary">— erre a szolgáltatóra készül az SMS</span>
+        </label>
+        <div id="provider-group" class="d-flex flex-wrap gap-1"></div>
       </div>
     </div>
 
@@ -204,6 +208,40 @@
     </div>
     <button id="btn-map-back" class="btn btn-outline-secondary w-100 mt-2">Vissza</button>
   </section>
+
+  <!-- Első indítás: fizetési mód választó -->
+  <div class="modal fade" id="onboarding-modal" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h6 class="modal-title">Melyik mobilszolgáltatód van? 📱</h6>
+        </div>
+        <div class="modal-body">
+          <p class="small mb-3">Csak egy beállítás — <b>nem indít semmit, nem kerül pénzbe</b>.
+            Ez alapján készítjük elő a parkolós SMS-t. Később bármikor átváltható.</p>
+          <div class="d-grid gap-2">
+            <button type="button" class="btn btn-outline-primary btn-lg onboard-provider" data-provider="telekom">
+              Telekom
+            </button>
+            <button type="button" class="btn btn-outline-primary btn-lg onboard-provider" data-provider="yettel">
+              Yettel
+            </button>
+            <button type="button" class="btn btn-outline-primary btn-lg onboard-provider" data-provider="one">
+              One (Vodafone)
+            </button>
+            <button type="button" class="btn btn-outline-primary onboard-provider" data-provider="nmf">
+              Egyik sem — Nemzeti Mobilfizetést használok
+            </button>
+          </div>
+          <div class="text-center small mt-3">
+            <a href="#" data-bs-toggle="modal" data-bs-target="#reg-info-modal" data-bs-dismiss="modal">
+              Nem tudom, mi ez — segítség
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Regisztrációs tudnivalók modal -->
   <div class="modal fade" id="reg-info-modal" tabindex="-1">

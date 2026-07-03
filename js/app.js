@@ -190,16 +190,54 @@ function renderPlateChips() {
   }
 }
 
+const PROVIDER_OPTIONS = [
+  ['telekom', 'Telekom'], ['yettel', 'Yettel'], ['one', 'One'], ['nmf', 'NMF'],
+];
+
 function renderTimeGroups() {
   const s = storage.getSettings();
   renderOptionGroup('duration-group', 'duration', DURATION_OPTIONS, s.defaultDuration);
   renderOptionGroup('reminder-group', 'reminder', REMINDER_OPTIONS, s.defaultReminder);
 }
 
+// Szolgaltato-gombsor a fooldalon: valtas azonnal mentodik (ketkartyasoknak).
+function renderProviderGroup() {
+  renderOptionGroup('provider-group', 'provider', PROVIDER_OPTIONS,
+    storage.getSettings().paymentProvider, () => {
+      const s = storage.getSettings();
+      s.paymentProvider = document.querySelector('input[name="provider"]:checked').value;
+      storage.saveSettings(s);
+      $('setting-provider').value = s.paymentProvider;
+    });
+}
+
+// Elso inditas: a legegyszerubb kerdes — melyik szolgaltatod van?
+function maybeShowOnboarding() {
+  if (storage.getSettings().onboarded) return;
+  const modal = bootstrap.Modal.getOrCreateInstance($('onboarding-modal'));
+  document.querySelectorAll('.onboard-provider').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const s = storage.getSettings();
+      s.paymentProvider = btn.dataset.provider;
+      s.onboarded = true;
+      storage.saveSettings(s);
+      $('setting-provider').value = s.paymentProvider;
+      renderProviderGroup();
+      modal.hide();
+    });
+  });
+  // ha a "segitseg" linkrol jott vissza es meg nem valasztott, kerdezzuk ujra
+  $('reg-info-modal').addEventListener('hidden.bs.modal', () => {
+    if (!storage.getSettings().onboarded) modal.show();
+  });
+  modal.show();
+}
+
 function initPlateControls() {
   const s = storage.getSettings();
   $('plate-input').value = s.plate1;
   renderTimeGroups();
+  renderProviderGroup();
   renderPlateChips();
   $('plate-input').addEventListener('input', () => {
     renderPlateChips();
@@ -332,6 +370,7 @@ function init() {
       $('plate-input').value = e.detail.plate1;
       renderTimeGroups();
     }
+    renderProviderGroup();
     renderPlateChips();
     updateStartButton();
   });
@@ -356,6 +395,8 @@ function init() {
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('service-worker.js').catch(() => {});
   }
+
+  maybeShowOnboarding();
 }
 
 init();

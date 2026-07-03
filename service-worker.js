@@ -1,7 +1,7 @@
 // ParkEasy Service Worker — offline mukodes.
 // Statikus assetek: cache-first. Zonaadat: network-first (frissulhet).
 
-const CACHE_NAME = 'parkeasy-v10';
+const CACHE_NAME = 'parkeasy-v11';
 
 const PRECACHE = [
   './',

@@ -18,6 +18,7 @@ const DEFAULT_SETTINGS = {
   defaultReminder: 0,  // perc az inditastol; 0 = nincs emlekezteto
   darkMode: false,
   paymentProvider: 'nmf', // 'nmf' | 'telekom' | 'yettel' | 'one'
+  onboarded: false,       // elso inditasos szolgaltato-valaszto lefutott-e
 };
 
 function read(key, fallback = null) {

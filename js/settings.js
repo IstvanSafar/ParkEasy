@@ -63,6 +63,7 @@ export function initSettingsView() {
       plate2Type: document.getElementById('setting-plate2-type').value,
       plate2Country: document.getElementById('setting-plate2-country').value.trim().toUpperCase(),
       paymentProvider: document.getElementById('setting-provider').value,
+      onboarded: storage.getSettings().onboarded,
       defaultDuration: getGroupValue('setting-duration'),
       defaultReminder: getGroupValue('setting-reminder'),
       darkMode: document.getElementById('setting-dark').checked,
