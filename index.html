@@ -36,7 +36,7 @@
   <section id="view-home">
     <div class="card mb-3">
       <div class="card-body">
-        <div id="geo-status" class="text-center text-secondary py-2">
+        <div id="geo-status" class="text-center text-secondary py-1">
           <div class="spinner-border spinner-border-sm me-2" role="status"></div>
           📍 Hely keresése…
         </div>
@@ -45,12 +45,12 @@
           <div class="row text-center">
             <div class="col">
               <div class="small text-secondary">Parkolási zóna</div>
-              <div id="zone-code" class="fs-2 fw-bold">–</div>
+              <div id="zone-code" class="fs-3 fw-bold">–</div>
               <div id="zone-district" class="small text-secondary"></div>
             </div>
             <div class="col border-start">
               <div class="small text-secondary">Díj</div>
-              <div id="zone-price" class="fs-4 fw-semibold">–</div>
+              <div id="zone-price" class="fs-5 fw-semibold">–</div>
               <div id="zone-hours" class="small text-secondary"></div>
             </div>
           </div>
@@ -58,7 +58,7 @@
         <div id="zone-free" class="alert alert-success text-center mb-0 d-none">
           Itt nem találtunk fizetős zónát 🎉
         </div>
-        <button id="btn-open-map" class="btn btn-outline-primary btn-sm w-100 mt-2">
+        <button id="btn-open-map" class="btn btn-outline-primary btn-sm w-100 mt-1 py-0">
           🗺️ Térkép — zónák és kézi választás
         </button>
       </div>
@@ -67,20 +67,14 @@
     <div class="card mb-3">
       <div class="card-body">
         <label class="form-label small text-secondary mb-1">Rendszám</label>
-        <div id="plate-chips" class="d-flex gap-2 mb-2 d-none"></div>
-        <input id="plate-input" class="form-control form-control-lg text-uppercase mb-2"
+        <div id="plate-chips" class="d-flex gap-2 mb-1 d-none"></div>
+        <input id="plate-input" class="form-control text-uppercase mb-1"
                placeholder="AABB123" autocomplete="off" maxlength="8">
-        <label class="form-label small text-secondary mb-1 mt-2">
-          Parkolási idő <span class="text-secondary">— mobilvásárlásnál az SMS-be kerül; start–stop: amíg le nem állítod</span>
-        </label>
+        <label class="form-label small text-secondary mb-1 mt-2">Parkolási idő <span class="text-secondary">(SMS-be is, mobilvásárlásnál)</span></label>
         <div id="duration-group" class="d-flex flex-wrap gap-1"></div>
-        <label class="form-label small text-secondary mb-1 mt-3">
-          Emlékeztető <span class="text-secondary">— ennyi idővel az indítás után szólunk</span>
-        </label>
+        <label class="form-label small text-secondary mb-1 mt-2">Emlékeztető</label>
         <div id="reminder-group" class="d-flex flex-wrap gap-1"></div>
-        <label class="form-label small text-secondary mb-1 mt-3">
-          Fizetési mód <span class="text-secondary">— erre a szolgáltatóra készül az SMS</span>
-        </label>
+        <label class="form-label small text-secondary mb-1 mt-2">Fizetési mód</label>
         <div id="provider-group" class="d-flex flex-wrap gap-1"></div>
       </div>
     </div>
@@ -88,8 +82,8 @@
     <button id="btn-start" class="btn btn-primary btn-lg w-100 py-3 fw-bold" disabled>
       INDÍTÁS
     </button>
-    <div id="start-hint" class="text-center small text-danger mt-2 d-none"></div>
-    <div class="text-center small mt-2">
+    <div id="start-hint" class="text-center small text-danger mt-1 d-none"></div>
+    <div class="text-center mt-1" style="font-size: 0.78rem">
       <a href="#" class="text-secondary" data-bs-toggle="modal" data-bs-target="#reg-info-modal">
         ℹ️ Az SMS-parkoláshoz regisztráció szükséges — hogyan?
       </a>

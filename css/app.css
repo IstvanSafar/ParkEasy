@@ -33,3 +33,39 @@ body {
 .btn-lg {
   min-height: 3.5rem;
 }
+
+/* ===== kompakt fooldal: ferjen el egy telefonkepernyon ===== */
+
+main.container {
+  padding-top: 0.5rem !important;
+  padding-bottom: 0.5rem !important;
+}
+
+.card {
+  margin-bottom: 0.5rem !important;
+}
+
+.card-body {
+  padding: 0.6rem 0.75rem;
+}
+
+.form-label {
+  margin-bottom: 0.15rem;
+}
+
+.form-label.mt-3, .form-label.mt-2 {
+  margin-top: 0.5rem !important;
+}
+
+/* valaszto gombsorok: kisebb, surubb gombok */
+#duration-group .btn, #reminder-group .btn,
+#provider-group .btn, #plate-chips .btn {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.82rem;
+}
+
+#btn-start {
+  min-height: 3rem;
+  padding-top: 0.6rem !important;
+  padding-bottom: 0.6rem !important;
+}
