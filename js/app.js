@@ -46,7 +46,7 @@ const $ = (id) => document.getElementById(id);
 
 // ---------- Nezetek ----------
 
-const VIEWS = ['view-home', 'view-active', 'view-settings', 'view-map'];
+const VIEWS = ['view-home', 'view-active', 'view-settings', 'view-map', 'view-about'];
 
 function showView(id) {
   for (const v of VIEWS) $(v).classList.toggle('d-none', v !== id);
@@ -359,6 +359,12 @@ function init() {
     setTimeout(() => { $('sms-copy').textContent = '📋 Üzenet másolása'; }, 2000);
   });
   $('nav-settings').addEventListener('click', () => showView('view-settings'));
+  $('nav-about').addEventListener('click', () => showView('view-about'));
+  $('btn-about-back').addEventListener('click', () => showView(parking.getActive() ? 'view-active' : 'view-home'));
+  fetch('data/config.json')
+    .then((r) => r.json())
+    .then((c) => { $('about-dataversion').textContent = c.dataVersion || '–'; })
+    .catch(() => {});
   $('nav-map').addEventListener('click', () => showView('view-map'));
   $('btn-open-map').addEventListener('click', () => showView('view-map'));
   $('btn-settings-back').addEventListener('click', () => showView('view-home'));

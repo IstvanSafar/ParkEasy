@@ -20,6 +20,7 @@
     <span class="navbar-brand fw-semibold">🅿️ ParkEasy</span>
     <div>
       <button id="nav-map" class="btn btn-outline-light btn-sm me-1" title="Térkép">🗺️</button>
+      <button id="nav-about" class="btn btn-outline-light btn-sm me-1" title="Súgó és feltételek">ℹ️</button>
       <button id="nav-settings" class="btn btn-outline-light btn-sm" title="Beállítások">⚙️</button>
     </div>
   </div>
@@ -189,6 +190,56 @@
       </ul>
     </div>
     <button id="btn-settings-back" class="btn btn-outline-secondary w-100">Vissza</button>
+  </section>
+
+  <!-- ===== SÚGÓ / NÉVJEGY NÉZET ===== -->
+  <section id="view-about" class="d-none">
+    <h5 class="mb-2">ℹ️ ParkEasy — súgó és feltételek</h5>
+
+    <div class="card mb-2">
+      <div class="card-header small fw-semibold py-1">Hogyan használd?</div>
+      <div class="card-body small">
+        <ol class="mb-0 ps-3">
+          <li>Engedélyezd a helymeghatározást — az app felismeri, melyik fizetős zónában állsz. Zónát kézzel is választhatsz a térképen (🗺️).</li>
+          <li>Add meg a rendszámod (a ⚙️ beállításokban elmentheted, akár kettőt is).</li>
+          <li>Válassz parkolási időt (vagy start–stopot) és emlékeztetőt — ez két külön dolog: az emlékeztető csak neked szól.</li>
+          <li>INDÍTÁS → megnyílik az SMS-küldő a kész üzenettel. <b>Küldés előtt mindig vesd össze a zónakódot a kihelyezett táblával!</b></li>
+          <li>Az SMS elküldése után erősítsd meg az appban — indul a számláló.</li>
+          <li>Távozáskor LEÁLLÍTÁS → kész a STOP SMS.</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="card mb-2">
+      <div class="card-header small fw-semibold py-1">Adatkezelés — nem gyűjtünk adatot</div>
+      <div class="card-body small">
+        <ul class="mb-1 ps-3">
+          <li>Az app <b>semmilyen adatot nem küld szerverre</b>: nincs fiók, nincs regisztráció, nincs analitika, nincs süti.</li>
+          <li>A rendszámod, a beállításaid és az előzményeid <b>kizárólag a saját készülékeden</b> tárolódnak (böngésző-tárhely). Törlésük: a böngésző adatainak törlésével vagy az app eltávolításával.</li>
+          <li>A GPS-pozíciódat csak a készüléken belül, a zóna megtalálásához használjuk — <b>sehová nem kerül elküldésre</b>.</li>
+          <li>Az SMS-t a telefonod SMS-alkalmazása küldi a te számodról — az app csak előkészíti a szöveget, a küldésről mindig te döntesz.</li>
+          <li>A térképnézet az OpenStreetMap csempéit tölti be (© OpenStreetMap közreműködők) — ilyenkor a térképszerver felé szokásos webes lekérés történik.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card mb-2">
+      <div class="card-header small fw-semibold py-1">Felhasználási feltételek</div>
+      <div class="card-body small">
+        <ul class="mb-1 ps-3">
+          <li>Az app <b>ingyenes, tájékoztató jellegű segédeszköz</b>. Nem hivatalos alkalmazás: nem áll kapcsolatban a Nemzeti Mobilfizetési Zrt.-vel, az önkormányzatokkal, a parkolásüzemeltetőkkel és a mobilszolgáltatókkal.</li>
+          <li>A zónaadatok a Nemzeti Mobilfizetési Zrt. nyilvános zóna-információi alapján készülnek, és elavulhatnak. <b>Parkolás előtt mindig a helyszíni közúti jelzések és a hatályos szabályok az irányadók.</b></li>
+          <li>A parkolási díjat a szolgáltatód a saját feltételei szerint számlázza; az SMS díja a mobil-előfizetésed szerint alakul. Az SMS-parkoláshoz előzetes regisztráció szükséges (részletek a főoldali ℹ️ linken).</li>
+          <li>A fejlesztő nem vállal felelősséget a zónaadatok pontatlanságából, elavulásából, az app hibájából vagy a téves zónakód-választásból eredő károkért és pótdíjakért. <b>Az appot mindenki a saját felelősségére használja.</b></li>
+          <li>Az emlékeztető csak addig működik, amíg az app meg van nyitva — ne erre alapozd a pótdíj elkerülését.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="text-center small text-secondary mb-2">
+      Zónaadatok frissítve: <span id="about-dataversion">–</span>
+    </div>
+    <button id="btn-about-back" class="btn btn-outline-secondary w-100">Vissza</button>
   </section>
 
   <!-- ===== TÉRKÉP NÉZET ===== -->
