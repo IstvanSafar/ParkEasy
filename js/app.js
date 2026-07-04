@@ -200,6 +200,16 @@ function renderTimeGroups() {
   renderOptionGroup('reminder-group', 'reminder', REMINDER_OPTIONS, s.defaultReminder);
 }
 
+// A fooldali tudnivalok-link szovege igazodik a fizetesi modhoz:
+// csak az NMF-hez kell kulon regisztracio.
+function updateRegLink() {
+  const provider = storage.getSettings().paymentProvider;
+  const names = { telekom: 'Telekom', yettel: 'Yettel', one: 'One' };
+  $('reg-link').textContent = provider === 'nmf'
+    ? 'ℹ️ A Nemzeti Mobilfizetéshez egyszeri regisztráció kell — hogyan?'
+    : `ℹ️ ${names[provider]} mobilvásárlással fizetsz — első parkolás előtti tudnivalók`;
+}
+
 // Szolgaltato-gombsor a fooldalon: valtas azonnal mentodik (ketkartyasoknak).
 function renderProviderGroup() {
   renderOptionGroup('provider-group', 'provider', PROVIDER_OPTIONS,
@@ -208,7 +218,9 @@ function renderProviderGroup() {
       s.paymentProvider = document.querySelector('input[name="provider"]:checked').value;
       storage.saveSettings(s);
       $('setting-provider').value = s.paymentProvider;
+      updateRegLink();
     });
+  updateRegLink();
 }
 
 // Elso inditas: a legegyszerubb kerdes — melyik szolgaltatod van?
