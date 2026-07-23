@@ -2,6 +2,8 @@
 
 **GPS-alapú parkolási zóna felismerés és SMS-parkolás Magyarországon — telepíthető, offline-képes webalkalmazás (PWA).**
 
+🔗 **Élő app:** https://istvansafar.github.io/ParkEasy/
+
 Megállsz az autóval, megnyitod az appot, és az megmondja, melyik fizetős zónában vagy, mennyibe kerül, majd egy gombnyomásra előkészíti a parkolást indító SMS-t. A lejárat előtt figyelmeztet, a leállító SMS-t is összeállítja. Nincs szerver, nincs fiók, nincs adatgyűjtés — minden a telefonodon fut és tárolódik.
 
 ## Funkciók
@@ -17,7 +19,7 @@ Megállsz az autóval, megnyitod az appot, és az megmondja, melyik fizetős zó
 
 ## Kipróbálás / használat
 
-Az app GitHub Pages-ről fut, telepíteni a böngésző „Hozzáadás a kezdőképernyőhöz" opciójával lehet.
+Nyisd meg: **https://istvansafar.github.io/ParkEasy/** — telepíteni a böngésző „Hozzáadás a kezdőképernyőhöz" opciójával lehet.
 
 **Fontos:** az SMS-parkoláshoz egyszeri regisztráció kell — vagy a [Nemzeti Mobilfizetésnél](https://www.nemzetimobilfizetes.hu) (egyenlegfeltöltéssel), vagy a mobilszolgáltatód „mobilvásárlás" szolgáltatásának aktiválásával (a parkolás a havi számlára kerül). A beállításokban (⚙️) add meg, melyiket használod, mert más számra és formátumban megy az SMS!
 
